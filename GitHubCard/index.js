@@ -3,6 +3,19 @@
            https://api.github.com/users/<your name>
 */
 
+function getGithubData(username) {
+  axios.get(`https://api.github.com/users/${username}`)
+  .then(function (response) {
+    // handle success
+    addCard(response);
+    console.log(response);
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
+}
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -24,7 +37,7 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['nantonacci', 'docoleman36', 'pshushereba', 'DoubleBridges', 'eric-wise'];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -46,6 +59,64 @@ const followersArray = [];
 
 */
 
+function addCard(userData) {
+  function createCard(userData) {
+    // create elements
+  const cardDiv = document.createElement('div');
+  const img = document.createElement('img');
+  const infoDiv = document.createElement('div');
+  const name = document.createElement('h3');
+  const username = document.createElement('p');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const profileLink = document.createElement('a');
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p');
+
+  // style elements
+  cardDiv.classList.add('card');
+  infoDiv.classList.add('card-info');
+  name.classList.add('name');
+  username.classList.add('username');
+
+  // add data
+
+  img.src = userData.data.avatar_url;
+  name.textContent = userData.data.name;
+  username.textContent = userData.data.login;
+  location.textContent = `Location: ${userData.data.location}`;
+  profile.textContent = 'Profile: '
+  profileLink.href = userData.data.html_url;
+  profileLink.textContent = userData.data.html_url;
+  bio.textContent = `Bio: ${userData.data.bio}`;
+  followers.textContent = `Followers: ${userData.data.followers}`;
+  following.textContent = `Following: ${userData.data.following}`;
+
+  // add to card
+  profile.appendChild(profileLink);
+  infoDiv.appendChild(name);
+  infoDiv.appendChild(username);
+  infoDiv.appendChild(location);
+  infoDiv.appendChild(profile);
+  infoDiv.appendChild(followers);
+  infoDiv.appendChild(following);
+  infoDiv.appendChild(bio);
+  cardDiv.appendChild(img);
+  cardDiv.appendChild(infoDiv);
+
+  return cardDiv;
+  }
+
+  const cards = document.querySelector('.cards');
+  const githubCard = createCard(userData);
+  if (userData.data.username === 'sofialevin') {
+    cards.prepend(githubCard);
+  } else {
+    cards.appendChild(githubCard);
+  }
+}
+
 /* List of LS Instructors Github username's: 
   tetondan
   dustinmyers
@@ -53,3 +124,9 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+followersArray.forEach((follower) => {
+  getGithubData(follower);
+})
+
+getGithubData('sofialevin');
