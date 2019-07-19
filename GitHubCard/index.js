@@ -3,16 +3,18 @@
            https://api.github.com/users/<your name>
 */
 
-axios.get('https://api.github.com/users/sofialevin')
+function getGithubData(username) {
+  axios.get(`https://api.github.com/users/${username}`)
   .then(function (response) {
     // handle success
-    githubCard(response);
+    addCard(response);
     console.log(response);
   })
   .catch(function (error) {
     // handle error
     console.log(error);
   })
+}
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -35,7 +37,7 @@ axios.get('https://api.github.com/users/sofialevin')
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['nantonacci', 'docoleman36', 'pshushereba', 'DoubleBridges', 'eric-wise'];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -57,7 +59,7 @@ const followersArray = [];
 
 */
 
-function githubCard(userData) {
+function addCard(userData) {
   function createCard(userData) {
     // create elements
   const cardDiv = document.createElement('div');
@@ -108,7 +110,11 @@ function githubCard(userData) {
 
   const cards = document.querySelector('.cards');
   const githubCard = createCard(userData);
-  cards.appendChild(githubCard);
+  if (userData.data.username === 'sofialevin') {
+    cards.prepend(githubCard);
+  } else {
+    cards.appendChild(githubCard);
+  }
 }
 
 /* List of LS Instructors Github username's: 
@@ -118,3 +124,9 @@ function githubCard(userData) {
   luishrd
   bigknell
 */
+
+followersArray.forEach((follower) => {
+  getGithubData(follower);
+})
+
+getGithubData('sofialevin');
